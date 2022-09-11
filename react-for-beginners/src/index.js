@@ -4,7 +4,7 @@ import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  //<React.StrictMode> //이게 있으면 자손까지 검사하기때문에 태그를 지워보자
     <App />
-  </React.StrictMode>
+  //</React.StrictMode>
 );
