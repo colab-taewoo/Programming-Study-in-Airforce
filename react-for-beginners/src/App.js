@@ -1,33 +1,38 @@
 import { useState, useEffect } from "react";
-function App() {
-  const [counter, setValue] = useState(0);
-  const [keyword, setKeyword] = useState("");
-  const onClick = () => setValue(((prev) => prev + 1))
-  const onChange = (event) => setKeyword(event.target.value);
-  console.log("I run all the time");
-  useEffect(() => {
-    console.log("I run only once");
-  }, []); // watch nothing. runs only once when first rendered
-  useEffect(() => {
-    if (keyword !== "" && keyword.length > 5) {
-    console.log("I run when 'keyword' changes.");
-    }
-  }, [keyword]); // if keyword changes, you wanna run this code.(if counter changes, it does not run)
-  useEffect(() => {
-    console.log("I run when 'counter' changes.", keyword);
-  }, [counter]);
 
+
+function App() {
+  const [toDo, setToDo] = useState("");
+  const [toDos, setToDos] = useState([]);
+  const onChange = (event) => setToDo(event.target.value)
+  const onSubmit = (event) => {
+    event.preventDefault(); //forms have a submit event on default. define onSubmit function to prevent it.
+    if (toDo === "") {
+      return;
+    }
+    setToDos((currentArray) => [toDo, ...currentArray]);
+    setToDo("");
+  }
+  const deleteBtn = (index) => {
+    setToDos((curToDos)=>curToDos.filter((_, curIndex) => curIndex !== index))
+  }
   return (
     <div>
-      <input 
-        value={keyword}  
-        onChange={onChange}
-        type="text" 
-        placeholder="Search here..." 
-      />
-      <h1>{counter}</h1>
-      <button onClick={onClick}>Click Me</button>
-    </div>
+      <h1>My To dos ({toDos.length})</h1>
+      <form onSubmit={onSubmit}>
+        <input 
+          onChange={onChange}
+          value={toDo}
+          type="text" 
+          placeholder="Write your to do..." 
+        />
+        <button>Add To Do</button>
+      </form>
+      <hr />
+      <ul>
+        {toDos.map((item, index) => <li key={index}>{item}{'\u00A0'}<button onClick={() => deleteBtn(index)}>❌</button></li>)}
+      </ul>
+    </div>   
   );
 }
 
